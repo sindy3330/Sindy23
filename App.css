@@ -1,0 +1,386 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.app-loading, .app-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 16px;
+  color: #718096;
+}
+.app-error { color: #e53e3e; }
+
+.sync-error-banner {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #fde8e8;
+  color: #c81e1e;
+  border-bottom: 1px solid #f8b4b4;
+  padding: 8px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* 備份提醒橫幅（超過 N 天未匯出時顯示） */
+.backup-nag-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: #fffbeb;
+  color: #92400e;
+  border-bottom: 1px solid #fde68a;
+  padding: 8px 16px;
+  font-size: 13px;
+}
+.backup-nag-btn {
+  background: #d97706;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.backup-nag-btn:hover:not(:disabled) { background: #b45309; }
+.backup-nag-btn:disabled { opacity: 0.6; cursor: default; }
+
+/* 匯出 Excel 按鈕 */
+.export-btn {
+  background: #fff;
+  color: #166534;
+  border: 1px solid #86efac;
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.export-btn:hover:not(:disabled) { background: #f0fdf4; }
+.export-btn:disabled { opacity: 0.6; cursor: default; }
+
+.export-btn--all {
+  margin-left: 16px;
+  background: #166534;
+  color: #fff;
+  border-color: #166534;
+}
+.export-btn--all:hover:not(:disabled) { background: #14532d; }
+
+.tab-toolbar {
+  padding: 10px 16px 4px;
+  display: flex;
+  gap: 8px;
+}
+
+.add-row-btn {
+  background: #1a56db;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.add-row-btn:hover { background: #1e429f; }
+
+.search-input {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  width: 220px;
+  outline: none;
+}
+.search-input:focus { border-color: #1a56db; }
+
+.add-inline-row td { padding: 0; background: #eff6ff; border-bottom: 2px solid #93c5fd; }
+
+.add-inline-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 14px;
+  align-items: center;
+}
+.add-inline-form input,
+.add-inline-form select {
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid #93c5fd;
+  border-radius: 4px;
+  font-size: 13px;
+  background: #fff;
+}
+.add-inline-form input { min-width: 120px; }
+
+.row-no {
+  text-align: center;
+  font-size: 12px;
+  color: #a0aec0;
+  font-weight: 600;
+}
+
+body {
+  font-family: 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+  background: #f4f6f8;
+  color: #2d3748;
+  font-size: 15px;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 24px;
+  background: #4a5568;
+  border-bottom: 2px solid #e2e8f0;
+  min-height: 52px;
+}
+
+.app-header h1 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #f9ad0a;
+  margin-right: 16px;
+  white-space: nowrap;
+}
+
+.pagination {
+  font-size: 13px;
+  color: #a0aec0;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.table-wrapper {
+  flex: 1;
+  overflow-x: auto;
+}
+
+.client-table {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+.client-table thead tr {
+  background: #4a5568;
+  color: #edf2f7;
+}
+
+.client-table thead th {
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  border-right: 1px solid #606c7d;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.client-table thead th:last-child {
+  border-right: none;
+}
+
+.client-table td {
+  white-space: nowrap;
+}
+
+/* 全專案可編輯備註：不限長度、超過寬度自動換行（蓋過表格 td 的 nowrap）。點擊後以 textarea 多行編輯 */
+.notes-text,
+.mgmt-notes-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-width: 90%;
+}
+
+.notes-textarea {
+  width: 260px;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #2d3748;
+  border: 1px solid #4a90d9;
+  border-radius: 4px;
+  padding: 4px 6px;
+  min-height: 48px;
+  resize: vertical;
+  outline: none;
+  white-space: pre-wrap;
+}
+
+/* 建檔日 / 修改日：日期在上、時間在下，超過欄寬自動換行 */
+.datetime-cell {
+  display: inline-flex;
+  flex-direction: column;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Address/name cells that might be long */
+.cell-address {
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tab-placeholder {
+  padding: 40px 24px;
+  color: #718096;
+  font-size: 14px;
+}
+
+.prop-mgmt-add-trigger td {
+  padding: 5px 10px;
+  background: #f7fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.prop-mgmt-add-row td {
+  padding: 10px 12px;
+  background: #ebf4ff;
+  border-bottom: 1px solid #bee3f8;
+}
+
+.prop-mgmt-add-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.prop-mgmt-add-form input,
+.prop-mgmt-add-form select {
+  border: 1px solid #cbd5e0;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 13px;
+  background: #fff;
+  height: 30px;
+}
+
+.prop-mgmt-add-form input:focus,
+.prop-mgmt-add-form select:focus { border-color: #4a5568; outline: none; }
+
+.prop-mgmt-add-form button[type="submit"] {
+  background: #4a5568;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  height: 30px;
+}
+
+.prop-mgmt-add-form button[type="submit"]:hover { background: #2d3748; }
+
+.prop-mgmt-add-form button[type="button"] {
+  background: #f7fafc;
+  color: #4a5568;
+  border: 1px solid #cbd5e0;
+  border-radius: 4px;
+  padding: 4px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  height: 30px;
+}
+
+.prop-mgmt-add-form button[type="button"]:hover { background: #edf2f7; }
+
+.prop-no-preview {
+  font-size: 12px;
+  color: #2b6cb0;
+  font-weight: 600;
+  padding: 0 4px;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   共用元件樣式（單一來源）
+   原本散落在 ClientRow/BuyerRow/ClosedClientRow/PropertyRow/
+   PropertyManagementRow 各自的 .css，且互相覆蓋（全域類別洩漏）。
+   收斂到此處，元件 .css 只保留各自專屬樣式與覆寫。
+   ────────────────────────────────────────────────────────────── */
+
+/* 操作按鈕（編輯 / 刪 / 存 / 取消） */
+.action-btns { display: flex; gap: 4px; }
+.action-btn {
+  padding: 2px 8px;
+  font-size: 12px;
+  border: 1px solid #cbd5e0;
+  border-radius: 3px;
+  background: #fff;
+  cursor: pointer;
+  color: #4a5568;
+}
+.action-btn:hover { background: #edf2f7; }
+.action-btn.del { color: #e53e3e; border-color: #fed7d7; }
+.action-btn.del:hover { background: #fff5f5; }
+.action-btn.save { color: #2b6cb0; border-color: #bee3f8; }
+.action-btn.save:hover { background: #ebf8ff; }
+
+/* 表格內編輯輸入框 */
+.edit-input {
+  padding: 3px 6px;
+  font-size: 13px;
+  border: 1px solid #90cdf4;
+  border-radius: 3px;
+  width: 90px;
+  font-family: inherit;
+  outline: none;
+}
+.edit-input.wide { width: 160px; }
+.edit-input.small { width: 60px; }
+
+/* 就地編輯（hover 才浮出邊框） */
+.inline-edit-input {
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-size: 13px;
+  color: #2d3748;
+  background: transparent;
+  outline: none;
+  min-width: 80px;
+}
+.inline-edit-input:hover { border-color: #cbd5e0; background: #fff; }
+.inline-edit-input:focus { border-color: #4a90d9; background: #fff; }
+
+/* 備註：點擊編輯 */
+.notes-text {
+  cursor: pointer;
+  color: #2d3748;
+  font-size: 13px;
+  display: block;
+  min-height: 20px;
+}
+.notes-text:hover {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 3px;
+}
+.notes-empty { color: #a0aec0; font-size: 12px; }
+
+/* 展開鈕上的數量徽章 */
+.log-count {
+  background: #3b82f6;
+  color: #fff;
+  border-radius: 10px;
+  padding: 0 6px;
+  font-size: 11px;
+}

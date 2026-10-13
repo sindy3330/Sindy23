@@ -184,4 +184,26 @@ export default function App({ session }) {
     if (!newClosedForm.name.trim()) return;
     (async () => {
       const personId = await createPerson({
-        name: newClosedForm.name.trim(), phone: newClosed
+        name: newClosedForm.name.trim(),
+        phone: newClosedForm.phone ? newClosedForm.phone.trim() : '',
+        birthday: newClosedForm.birthday,
+        address: newClosedForm.address,
+        mailingAddress: newClosedForm.mailingAddress,
+      });
+      await sheetApi.add('成交', {
+        id: genId(),
+        personId,
+        staff: newClosedForm.staff,
+        type: newClosedForm.type || '買賣',
+        property: newClosedForm.property ? newClosedForm.property.trim() : '',
+        price: newClosedForm.price ? newClosedForm.price.trim() : '',
+        date: newClosedForm.date || nowDatetime(),
+        note: newClosedForm.note ? newClosedForm.note.trim() : '',
+        createdAt: nowDatetime(),
+        updatedAt: nowDatetime(),
+        updatedBy: getCurrentStaffName(session),
+      });
+    })().catch(handleSyncError);
+    setNewClosedForm({ ...EMPTY_CLOSED, staff: getCurrentStaffName(session) });
+    setAddingClosed(false);
+  }

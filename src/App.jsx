@@ -207,3 +207,4 @@ export default function App({ session }) {
     setNewClosedForm({ ...EMPTY_CLOSED, staff: getCurrentStaffName(session) });
     setAddingClosed(false);
   }
+}
